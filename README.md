@@ -203,6 +203,23 @@ class Article
 
 ### Using in the Admin (maybe in an AbstractAdmin.php)
 
+## With the AbstractSonataAdminAnnotationAdmin
+
+```php
+<?php
+
+namespace YourApp\Admin;
+
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Admin\AbstractSonataAdminAnnotationAdmin;
+
+abstract class AbstractAdmin extends AbstractSonataAdminAnnotationAdmin
+{
+
+}
+```
+
+## Own implementation
+
 ``` php
 <?php
 
