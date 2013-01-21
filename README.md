@@ -203,7 +203,7 @@ class Article
 
 ### Using in the Admin (maybe in an AbstractAdmin.php)
 
-## With the AbstractSonataAdminAnnotationAdmin
+#### With the AbstractSonataAdminAnnotationAdmin
 
 ```php
 <?php
@@ -218,7 +218,7 @@ abstract class AbstractAdmin extends AbstractSonataAdminAnnotationAdmin
 }
 ```
 
-## Own implementation
+#### Own implementation
 
 ``` php
 <?php
