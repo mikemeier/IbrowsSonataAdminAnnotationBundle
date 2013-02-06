@@ -177,14 +177,4 @@ abstract class AbstractAnnotationReader implements AnnotationReaderInterface
 
         return $annotations;
     }
-
-    /**
-     * @param string $className
-     * @return \ReflectionProperty[]
-     */
-    protected function getReflectionProperties($className)
-    {
-        $reflectionClass = new \ReflectionClass($className);
-        return $reflectionClass->getProperties();
-    }
 }
