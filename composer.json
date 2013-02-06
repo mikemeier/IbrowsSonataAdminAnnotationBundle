@@ -12,12 +12,11 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "ibrows/annotation-reader": "dev-master",
-        "symfony/framework-bundle": ">=2.0,<2.2-dev"
+        "symfony/framework-bundle": ">=2.0,<2.2-dev",
+        "ibrows/annotation-reader": "dev-master"
     },
     "autoload": {
         "psr-0": { "Ibrows\\Bundle\\SonataAdminAnnotationBundle": "" }
     },
-    "target-dir": "Ibrows/Bundle/SonataAdminAnnotationBundle",
     "minimum-stability": "dev"
 }
