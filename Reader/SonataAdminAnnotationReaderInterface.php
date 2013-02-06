@@ -7,6 +7,8 @@ use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ShowInterface;
 use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\FormInterface;
 use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\DatagridInterface;
 
+use Ibrows\AnnotationReader\AnnotationReaderInterface;
+
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;

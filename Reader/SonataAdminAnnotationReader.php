@@ -2,24 +2,19 @@
 
 namespace Ibrows\Bundle\SonataAdminAnnotationBundle\Reader;
 
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ListInterface;
 use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ListMapper;
-
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ShowInterface;
 use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ShowMapper;
-
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\FormInterface;
 use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\FormMapper;
-
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\DatagridInterface;
 use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\DatagridMapper;
+
+use Ibrows\AnnotationReader\AnnotationReader;
 
 use Sonata\AdminBundle\Datagrid\ListMapper as SonataListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper as SonataDatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper as SonataFormMapper;
 use Sonata\AdminBundle\Show\ShowMapper as SonataShowMapper;
 
-class SonataAdminAnnotationReader extends AbstractAnnotationReader implements SonataAdminAnnotationReaderInterface
+class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdminAnnotationReaderInterface
 {
     /**
      * @inheritdoc
