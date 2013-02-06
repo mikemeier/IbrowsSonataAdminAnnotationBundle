@@ -22,8 +22,7 @@ use Sonata\AdminBundle\Show\ShowMapper as SonataShowMapper;
 class SonataAdminAnnotationReader extends AbstractAnnotationReader implements SonataAdminAnnotationReaderInterface
 {
     /**
-     * @param mixed $entity
-     * @return ListInterface[]
+     * @inheritdoc
      */
     public function getListMapperAnnotations($entity)
     {
@@ -43,8 +42,7 @@ class SonataAdminAnnotationReader extends AbstractAnnotationReader implements So
     }
 
     /**
-     * @param mixed $entity
-     * @return ShowInterface[]
+     * @inheritdoc
      */
     public function getShowMapperAnnotations($entity)
     {
@@ -64,8 +62,7 @@ class SonataAdminAnnotationReader extends AbstractAnnotationReader implements So
     }
 
     /**
-     * @param mixed $entity
-     * @return FormInterface[]
+     * @inheritdoc
      */
     public function getFormMapperAnnotations($entity)
     {
@@ -85,8 +82,7 @@ class SonataAdminAnnotationReader extends AbstractAnnotationReader implements So
     }
 
     /**
-     * @param mixed $entity
-     * @return DatagridInterface[]
+     * @inheritdoc
      */
     public function getDatagridMapperAnnotation($entity)
     {
@@ -106,8 +102,7 @@ class SonataAdminAnnotationReader extends AbstractAnnotationReader implements So
     }
 
     /**
-     * @param mixed $entity
-     * @param SonataListMapper $listMapper
+     * @inheritdoc
      */
     public function configureListFields($entity, SonataListMapper $listMapper)
     {
@@ -131,8 +126,7 @@ class SonataAdminAnnotationReader extends AbstractAnnotationReader implements So
     }
 
     /**
-     * @param mixed $entity
-     * @param SonataFormMapper $formMapper
+     * @inheritdoc
      */
     public function configureFormFields($entity, SonataFormMapper $formMapper)
     {
@@ -149,8 +143,7 @@ class SonataAdminAnnotationReader extends AbstractAnnotationReader implements So
     }
 
     /**
-     * @param mixed $entity
-     * @param SonataShowMapper $showMapper
+     * @inheritdoc
      */
     public function configureShowFields($entity, SonataShowMapper $showMapper)
     {
@@ -166,8 +159,7 @@ class SonataAdminAnnotationReader extends AbstractAnnotationReader implements So
     }
 
     /**
-     * @param mixed $entity
-     * @param SonataDatagridMapper $datagridMapper
+     * @inheritdoc
      */
     public function configureDatagridFilters($entity, SonataDatagridMapper $datagridMapper)
     {
@@ -208,5 +200,15 @@ class SonataAdminAnnotationReader extends AbstractAnnotationReader implements So
         }
 
         return $annotations;
+    }
+
+    /**
+     * @param string $className
+     * @return \ReflectionProperty[]
+     */
+    protected function getReflectionProperties($className)
+    {
+        $reflectionClass = new \ReflectionClass($className);
+        return $reflectionClass->getProperties();
     }
 }
