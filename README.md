@@ -218,6 +218,22 @@ abstract class AbstractAdmin extends AbstractSonataAdminAnnotationAdmin
 }
 ```
 
+#### With Traits (PHP >=5.4)
+```php
+<?php
+
+namespace YourApp\Admin;
+
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Admin\SonataAdminAnnotationAllTrait;
+
+use Sonata\AdminBundle\Admin\Admin;
+
+abstract class AbstractAdmin extends Admin
+{
+    use SonataAdminAnnotationAllTrait;
+}
+```
+
 #### Own implementation
 
 ``` php
