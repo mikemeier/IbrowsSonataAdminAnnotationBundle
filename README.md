@@ -3,6 +3,15 @@ IbrowsSonataAdminAnnotationBundle
 
 Manage Sonata Form, Data, List and ShowMapper over annotations
 
+New features
+============
+
+### Version 1.1.0
+
+- New "with" and "withOptions" in FormMapper and ShowMapper Annotation for grouping -> @FormMapper(with="Main")
+- Allow configuration of static callback methods in entity with @FormCallback on Method (see @FormCallback example)
+
+
 How to install
 ==============
 
@@ -62,7 +71,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Table(name="country")
  * @ORM\Entity
  * @Sonata\Order\ListMapperAll
  * @Sonata\Order\ShowMapperAll
@@ -121,6 +129,11 @@ namespace YourApp\Entity;
 
 use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation as Sonata;
 
+use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
+
 use Application\Sonata\MediaBundle\Entity\Gallery;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -128,8 +141,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Table(name="article")
- * @ORM\Entity(repositoryClass="Ibrows\CNCBundle\Repository\ArticleRepository")
+ * @ORM\Entity
  */
 class Article
 {
@@ -198,6 +210,15 @@ class Article
      * )
      */
     protected $pictures;
+
+    /**
+     * @param \Sonata\AdminBundle\Form\FormMapper $formMapper
+     * @Sonata\FormCallback
+     */
+    public static function configureFormFields(FormMapper $formMapper)
+    {
+        $formMapper->add('countries');
+    }
 }
 ```
 
@@ -241,7 +262,7 @@ abstract class AbstractAdmin extends Admin
 
 namespace YourApp\Admin;
 
-use Ibrows\Bundle\SonataAnnotationBundle\Reader\SonataAnnotationReaderInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Reader\SonataAdminAnnotationReaderInterface;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -295,7 +316,7 @@ abstract class AbstractAdmin extends Admin
     }
 
     /**
-     * @return SonataAnnotationReaderInterface
+     * @return SonataAdminAnnotationReaderInterface
      */
     protected function getSonataAnnotationReader()
     {
