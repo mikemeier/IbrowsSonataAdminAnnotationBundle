@@ -12,6 +12,10 @@ use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\FormCallbackInterface;
 use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ListCallbackInterface;
 use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\DatagridCallbackInterface;
 
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\ListReorderInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\FormReorderInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\ShowReorderInterface;
+
 use Ibrows\AnnotationReader\AnnotationReader;
 
 use Sonata\AdminBundle\Datagrid\ListMapper as SonataListMapper;
@@ -125,6 +129,11 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
         }
 
         $this->invokeCallbacks($entity, $this->getListMapperCallbacks($entity), array($listMapper));
+
+        $reorder = $this->getListReorderAnnotation($entity);
+        if($reorder){
+            $listMapper->reorder($reorder->getKeys());
+        }
     }
 
     /**
@@ -153,6 +162,12 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
         }
 
         $this->invokeCallbacks($entity, $this->getFormMapperCallbacks($entity), array($formMapper));
+
+        foreach($this->getFormReorderAnnotations($entity) as $formReorderAnnotation){
+            $formMapper->with($formReorderAnnotation->getWith());
+            $formMapper->reorder($formReorderAnnotation->getKeys());
+            $formMapper->end();
+        }
     }
 
     /**
@@ -180,6 +195,12 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
         }
 
         $this->invokeCallbacks($entity, $this->getShowMapperCallbacks($entity), array($showMapper));
+
+        foreach($this->getShowReorderAnnotations($entity) as $showReorderAnnotation){
+            $showMapper->with($showReorderAnnotation->getWith());
+            $showMapper->reorder($showReorderAnnotation->getKeys());
+            $showMapper->end();
+        }
     }
 
     /**
@@ -236,6 +257,45 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     public function getDatagridMapperCallbacks($entity)
     {
         return $this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_DATAGRID_CALLBACK, self::SCOPE_METHOD);
+    }
+
+    /**
+     * @param $entity
+     * @return ListReorderInterface
+     */
+    public function getListReorderAnnotation($entity)
+    {
+        return $this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_LIST_REORDER, self::SCOPE_CLASS);
+    }
+
+    /**
+     * @param $entity
+     * @return FormReorderInterface[]
+     */
+    public function getFormReorderAnnotations($entity)
+    {
+        $annotations = $this->getAnnotations($entity);
+        $scopeAnnotations = $annotations[self::SCOPE_CLASS];
+        if(!isset($scopeAnnotations[self::ANNOTATION_TYPE_ADMIN_FORM_REORDER])){
+            return array();
+        }
+
+        return $scopeAnnotations[self::ANNOTATION_TYPE_ADMIN_FORM_REORDER];
+    }
+
+    /**
+     * @param $entity
+     * @return ShowReorderInterface[]
+     */
+    public function getShowReorderAnnotations($entity)
+    {
+        $annotations = $this->getAnnotations($entity);
+        $scopeAnnotations = $annotations[self::SCOPE_CLASS];
+        if(!isset($scopeAnnotations[self::ANNOTATION_TYPE_ADMIN_SHOW_REORDER])){
+            return array();
+        }
+
+        return $scopeAnnotations[self::ANNOTATION_TYPE_ADMIN_SHOW_REORDER];
     }
 
     /**

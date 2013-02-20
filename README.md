@@ -3,10 +3,20 @@ IbrowsSonataAdminAnnotationBundle
 
 Manage Sonata Form, Data, List and ShowMapper over annotations
 
+Known issues
+============
+### Version 1.1.*
+
+- Using oneToMany/manyToOne relations produces an "entity not managed" doctrine error. Reason is that FormMapper-Annotation per default sets by_reference to false, using @FormMapper(options={"by_reference"=true}) will fix that.
+
 New features
 ============
 
-### Version 1.1.0
+### Version 1.2
+
+- Allow reorder of FormMapper/ShowMapper and ListMapper with @Order/FormReorder, @Order/ShowReorder, @Order/ListReorder or @Order/ShowAndFormReorder annotations
+
+### Version 1.1
 
 - New "with" and "withOptions" in FormMapper and ShowMapper Annotation for grouping -> @FormMapper(with="Main")
 - Allow configuration of static callback methods in entity with @FormCallback on Method (see @FormCallback example)
@@ -75,6 +85,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @Sonata\Order\ListMapperAll
  * @Sonata\Order\ShowMapperAll
  * @Sonata\Order\FormMapperAll
+ *
+ * @Sonata\Order\ShowAndFormreorder(with="General", keys={"name"})
+ * @Sonata\Order\ShowAndFormreorder(keys={"taxRate"})
  */
 class Country
 {
@@ -85,12 +98,14 @@ class Country
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Sonata\ListMapper(identifier=true)
      * @Sonata\Order\FormMapperExclude
+     * @Sonata\ShowMapper(with="General")
      */
     protected $id;
 
     /**
      * @var string $name
      * @ORM\Column(type="string")
+     * @Sonata\ShowMapper(with="General")
      */
     protected $name;
 
@@ -142,6 +157,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
+ * @Sonata\Order\ShowAndFormreorder(keys={"name"})
  */
 class Article
 {

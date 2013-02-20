@@ -12,6 +12,10 @@ use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\FormCallbackInterface;
 use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\DatagridCallbackInterface;
 use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ListCallbackInterface;
 
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\ListReorderInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\FormReorderInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\ShowReorderInterface;
+
 use Ibrows\AnnotationReader\AnnotationReaderInterface;
 
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -24,10 +28,12 @@ interface SonataAdminAnnotationReaderInterface extends AnnotationReaderInterface
     const
         ANNOTATION_TYPE_ADMIN_LIST = 'ListInterface',
         ANNOTATION_TYPE_ADMIN_LIST_CALLBACK = 'ListCallbackInterface',
+        ANNOTATION_TYPE_ADMIN_LIST_REORDER = 'ListReorderInterface',
         ANNOTATION_TYPE_ADMIN_LIST_EXCLUDE = 'ListExcludeInterface',
         ANNOTATION_TYPE_ADMIN_LIST_ALL = 'ListAllInterface',
 
         ANNOTATION_TYPE_ADMIN_SHOW = 'ShowInterface',
+        ANNOTATION_TYPE_ADMIN_SHOW_REORDER = 'ShowReorderInterface',
         ANNOTATION_TYPE_ADMIN_SHOW_CALLBACK = 'ShowCallbackInterface',
         ANNOTATION_TYPE_ADMIN_SHOW_EXCLUDE = 'ShowExcludeInterface',
         ANNOTATION_TYPE_ADMIN_SHOW_ALL = 'ShowAllInterface',
@@ -38,6 +44,7 @@ interface SonataAdminAnnotationReaderInterface extends AnnotationReaderInterface
         ANNOTATION_TYPE_ADMIN_DATAGRID_ALL = 'DatagridAllInterface',
 
         ANNOTATION_TYPE_ADMIN_FORM = 'FormInterface',
+        ANNOTATION_TYPE_ADMIN_FORM_REORDER = 'FormReorderInterface',
         ANNOTATION_TYPE_ADMIN_FORM_CALLBACK = 'FormCallbackInterface',
         ANNOTATION_TYPE_ADMIN_FORM_EXCLUDE = 'FormExcludeInterface',
         ANNOTATION_TYPE_ADMIN_FORM_ALL = 'FormAllInterface'
@@ -56,6 +63,12 @@ interface SonataAdminAnnotationReaderInterface extends AnnotationReaderInterface
     public function getListMapperCallbacks($entity);
 
     /**
+     * @param $entity
+     * @return ListReorderInterface
+     */
+    public function getListReorderAnnotation($entity);
+
+    /**
      * @param mixed $entity
      * @return ShowInterface[]
      */
@@ -68,6 +81,12 @@ interface SonataAdminAnnotationReaderInterface extends AnnotationReaderInterface
     public function getShowMapperCallbacks($entity);
 
     /**
+     * @param $entity
+     * @return ShowReorderInterface[]
+     */
+    public function getShowReorderAnnotations($entity);
+
+    /**
      * @param mixed $entity
      * @return FormInterface[]
      */
@@ -78,6 +97,12 @@ interface SonataAdminAnnotationReaderInterface extends AnnotationReaderInterface
      * @return FormCallbackInterface[]
      */
     public function getFormMapperCallbacks($entity);
+
+    /**
+     * @param $entity
+     * @return FormReorderInterface[]
+     */
+    public function getFormReorderAnnotations($entity);
 
     /**
      * @param mixed $entity
