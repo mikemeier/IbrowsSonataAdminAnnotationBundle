@@ -174,7 +174,6 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
                 $annotation->getFieldDescriptionOptions()
             );
 
-            $with = $annotation->getWith();
             if($with){
                 $showMapper->end($with);
             }
