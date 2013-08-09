@@ -10,7 +10,7 @@ class FormMapper extends AbstractMapper implements FormInterface
     /**
      * @var array
      */
-    public $options = array('by_reference' => false);
+    public $options = array();
 
     /**
      * @var string
