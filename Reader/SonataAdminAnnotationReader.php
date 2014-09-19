@@ -146,7 +146,9 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
         foreach($annotations as $propertyName => $annotation){
             $with = $annotation->getWith();
             if($with){
-                $formMapper->with($with);
+                $formMapper->with($with, $annotation->getWithOptions());
+            } else {
+                $formMapper->with($formMapper->getAdmin()->getLabel());
             }
 
             $formMapper->add(
@@ -156,9 +158,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
                 $annotation->getFieldDescriptionOptions()
             );
 
-            if($with){
-                $formMapper->end();
-            }
+            $formMapper->end();
         }
 
         $this->invokeCallbacks($entity, $this->getFormMapperCallbacks($entity), array($formMapper));
@@ -181,6 +181,8 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
             $with = $annotation->getWith();
             if($with){
                 $showMapper->with($with, $annotation->getWithOptions());
+            } else {
+                $showMapper->with($showMapper->getAdmin()->getLabel());
             }
 
             $showMapper->add(
@@ -189,9 +191,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
                 $annotation->getFieldDescriptionOptions()
             );
 
-            if($with){
-                $showMapper->end($with);
-            }
+            $showMapper->end($with);
         }
 
         $this->invokeCallbacks($entity, $this->getShowMapperCallbacks($entity), array($showMapper));
