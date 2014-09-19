@@ -144,12 +144,8 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
         $annotations = $this->getFormMapperAnnotations($entity);
 
         foreach($annotations as $propertyName => $annotation){
-            $with = $annotation->getWith();
-            if($with){
-                $formMapper->with($with, $annotation->getWithOptions());
-            } else {
-                $formMapper->with($formMapper->getAdmin()->getLabel());
-            }
+            $with = $annotation->getWith() ?: $formMapper->getAdmin()->getLabel();
+            $formMapper->with($with, $annotation->getWithOptions());
 
             $formMapper->add(
                 $annotation->getName() ?: $propertyName,
@@ -164,7 +160,8 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
         $this->invokeCallbacks($entity, $this->getFormMapperCallbacks($entity), array($formMapper));
 
         foreach($this->getFormReorderAnnotations($entity) as $formReorderAnnotation){
-            $formMapper->with($formReorderAnnotation->getWith());
+            $reorderWith = $formReorderAnnotation->getWith() ?: $formMapper->getAdmin()->getLabel();
+            $formMapper->with($reorderWith);
             $formMapper->reorder($formReorderAnnotation->getKeys());
             $formMapper->end();
         }
@@ -178,12 +175,8 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
         $annotations = $this->getShowMapperAnnotations($entity);
 
         foreach($annotations as $propertyName => $annotation){
-            $with = $annotation->getWith();
-            if($with){
-                $showMapper->with($with, $annotation->getWithOptions());
-            } else {
-                $showMapper->with($showMapper->getAdmin()->getLabel());
-            }
+            $with = $annotation->getWith() ?: $showMapper->getAdmin()->getLabel();
+            $showMapper->with($with, $annotation->getWithOptions());
 
             $showMapper->add(
                 $annotation->getName() ?: $propertyName,
@@ -197,7 +190,8 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
         $this->invokeCallbacks($entity, $this->getShowMapperCallbacks($entity), array($showMapper));
 
         foreach($this->getShowReorderAnnotations($entity) as $showReorderAnnotation){
-            $showMapper->with($showReorderAnnotation->getWith());
+            $reorderWith = $showReorderAnnotation->getWith() ?: $showMapper->getAdmin()->getLabel();
+            $showMapper->with($reorderWith);
             $showMapper->reorder($showReorderAnnotation->getKeys());
             $showMapper->end();
         }
