@@ -20,7 +20,36 @@ class IbrowsSonataAdminAnnotationExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        if(isset($config['autoservice'])){
+            $this->registerContainerParametersRecursive($container, 'ibrows_sonata_admin_annotation', $config);
+        }
+
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param $alias
+     * @param $config
+     */
+    protected function registerContainerParametersRecursive(ContainerBuilder $container, $alias, $config)
+    {
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveArrayIterator($config),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach($iterator as $value){
+            $path = array( );
+            for($i = 0; $i <= $iterator->getDepth(); $i++){
+                $path[] = $iterator->getSubIterator($i)->key();
+            }
+            $key = $alias . '.' . implode(".", $path);
+            $container->setParameter($key, $value);
+        }
     }
 }
