@@ -2,6 +2,7 @@
 
 namespace Ibrows\Bundle\SonataAdminAnnotationBundle;
 
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -38,7 +39,6 @@ class IbrowsSonataAdminAnnotationBundle extends Bundle
             }
         }
 
-        $compilerPass = new AutoServiceCompilerPass();
-        $container->addCompilerPass($compilerPass);
+        $container->addCompilerPass(new AutoServiceCompilerPass());
     }
 }
