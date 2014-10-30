@@ -29,7 +29,7 @@ class AutoServiceCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if(!$container->hasParameter('ibrows_sonata_admin_annotation.autoservice')){
+        if (!$container->hasParameter('ibrows_sonata_admin_annotation.autoservice')) {
             return;
         }
 
@@ -37,14 +37,14 @@ class AutoServiceCompilerPass implements CompilerPassInterface
 
         $entityConfigs = isset($configuration['entities']) ? $configuration['entities'] : array();
 
-        if(!$entityConfigs){
+        if (!$entityConfigs) {
             return;
         }
 
         $annotationReader = $container->get('ibrows_sonataadmin.annotation.reader');
 
-        foreach($entityConfigs as $entityConfig){
-            foreach($this->getEntityServices($entityConfig, $configuration, $annotationReader) as $serviceId => $definition){
+        foreach ($entityConfigs as $entityConfig) {
+            foreach ($this->getEntityServices($entityConfig, $configuration, $annotationReader) as $serviceId => $definition) {
                 $container->setDefinition($serviceId, $definition);
             }
         }
@@ -68,7 +68,7 @@ class AutoServiceCompilerPass implements CompilerPassInterface
         $idPrefix = $configuration['service_id_prefix'];
 
         /** @var SplFileInfo $file */
-        foreach($finder->in($directory)->files('*.php') as $file){
+        foreach ($finder->in($directory)->files('*.php') as $file) {
             $baseName = $file->getBasename('.php');
             $relativePath = $file->getRelativePath();
 
@@ -78,8 +78,8 @@ class AutoServiceCompilerPass implements CompilerPassInterface
             $className = implode("\\", $namespacePieces);
 
             /** @var AutoService $autoServiceAnnotation */
-            if($autoServiceAnnotation = $annotationReader->getAnnotationsByType($className, 'AutoServiceInterface', $annotationReader::SCOPE_CLASS)){
-                $id = $idPrefix.'.'.implode(".", array_map('strtolower', $idPieces));
+            if ($autoServiceAnnotation = $annotationReader->getAnnotationsByType($className, 'AutoServiceInterface', $annotationReader::SCOPE_CLASS)) {
+                $id = $idPrefix . '.' . implode(".", array_map('strtolower', $idPieces));
                 $services[$id] = $this->getEntityService($autoServiceAnnotation, $replacedConfig, $className, $baseName);
             }
         }
@@ -96,26 +96,27 @@ class AutoServiceCompilerPass implements CompilerPassInterface
      */
     protected function getEntityService(AutoService $autoServiceAnnotation, array $replacedConfig, $className, $baseName)
     {
-        if(!$admin = $autoServiceAnnotation->admin ?: $this->getConfigValue($replacedConfig, 'admin')){
-            throw new \RuntimeException("Cannot determine SonataAdmin for ". $className ." provide one in configuration or on the AutoServiceAnnotation");
+        if (!$admin = $autoServiceAnnotation->admin ?: $this->getConfigValue($replacedConfig, 'admin')) {
+            throw new \RuntimeException("Cannot determine SonataAdmin for " . $className . " provide one in configuration or on the AutoServiceAnnotation");
         }
 
-        if(!$controller = $autoServiceAnnotation->admin ?: $this->getConfigValue($replacedConfig, 'controller')){
-            throw new \RuntimeException("Cannot determine SonataAdminController for ". $className ." provide one in configuration or on the AutoServiceAnnotation");
+        if (!$controller = $autoServiceAnnotation->controller ?: $this->getConfigValue($replacedConfig, 'controller')) {
+            throw new \RuntimeException("Cannot determine SonataAdminController for " . $className . " provide one in configuration or on the AutoServiceAnnotation");
         }
 
         $service = new Definition($admin, array(null, $className, $controller));
 
-        $service->addTag('sonata.admin', array(
-            'manager_type' => 'orm',
-
-            'group' => $autoServiceAnnotation->group ?: $baseName,
-            'label' => $autoServiceAnnotation->label ?: $baseName,
-
-            'show_in_dashboard' => !is_null($autoServiceAnnotation->showInDashboard) ? $autoServiceAnnotation->showInDashboard : $this->getConfigValue($replacedConfig, 'show_in_dashboard'),
-            'label_translator_strategy' => $autoServiceAnnotation->labelTranslatorStrategy ?: $this->getConfigValue($replacedConfig, 'label_translator_strategy'),
-            'label_catalogue' => $autoServiceAnnotation->labelCatalog ?: $this->getConfigValue($replacedConfig, 'label_catalogue'),
-        ));
+        $service->addTag(
+            'sonata.admin',
+            array(
+                'manager_type'              => 'orm',
+                'group'                     => $autoServiceAnnotation->group ?: $baseName,
+                'label'                     => $autoServiceAnnotation->label ?: $baseName,
+                'show_in_dashboard'         => !is_null($autoServiceAnnotation->showInDashboard) ? $autoServiceAnnotation->showInDashboard : $this->getConfigValue($replacedConfig, 'show_in_dashboard'),
+                'label_translator_strategy' => $autoServiceAnnotation->labelTranslatorStrategy ?: $this->getConfigValue($replacedConfig, 'label_translator_strategy'),
+                'label_catalogue'           => $autoServiceAnnotation->labelCatalog ?: $this->getConfigValue($replacedConfig, 'label_catalogue'),
+            )
+        );
 
         return $service;
     }
