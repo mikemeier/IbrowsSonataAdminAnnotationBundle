@@ -5,6 +5,10 @@ Manage Sonata Form, Data, List and ShowMapper over annotations
 
 Known issues
 ============
+### Version 2.2.*
+
+- When using the @AutoService Annotation you have to clear the cache everytime you make changes on this Annotation (remove/add/edit). Reason is that the appDevDebugContainer is fully cached and the CompilerPass cannot register the new changes.
+
 ### Version 1.1.*
 
 - Using oneToMany/manyToOne relations produces an "entity not managed" doctrine error. Reason is that FormMapper-Annotation per default sets by_reference to false, using @FormMapper(options={"by_reference"=true}) will fix that.
@@ -14,7 +18,7 @@ New features
 
 ### Version 2.2
 
-- Allow to register SonataAdminServices over Annotations with @AutoService
+- Allow to register SonataAdminServices over Annotations with @AutoService @see Known issues for caching problems
 
 ### Version 1.2
 
@@ -47,7 +51,7 @@ How to install
 $ php composer.phar update ibrows/sonata-admin-annotation-bundle
 ```
 
-### Enable the bundle in AppKernel.php
+### Enable the bundle in AppKernel.php - Dont forget to give AppKernel to the Bundle and register the Bundle *BEFORE* SonataAdminBundle
 
 ``` php
 <?php
@@ -57,7 +61,7 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Ibrows\Bundle\SonataAdminAnnotationBundle\IbrowsSonataAdminAnnotationBundle(),
+        new Ibrows\Bundle\SonataAdminAnnotationBundle\IbrowsSonataAdminAnnotationBundle($this),
     );
 }
 ```
