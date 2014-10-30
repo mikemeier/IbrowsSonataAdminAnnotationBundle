@@ -12,6 +12,10 @@ Known issues
 New features
 ============
 
+### Version 2.2
+
+- Allow to register SonataAdminServices over Annotations with @AutoService
+
 ### Version 1.2
 
 - Allow reorder of FormMapper/ShowMapper and ListMapper with @Order/FormReorder, @Order/ShowReorder, @Order/ListReorder or @Order/ShowAndFormReorder annotations
@@ -58,6 +62,19 @@ public function registerBundles()
 }
 ```
 
+### Configuration (Only needed if @AutoService is used)
+
+``` yaml
+ibrows_sonata_admin_annotation:
+    autoservice:
+        service_id_prefix: companyname.admin
+        default_entity:
+            admin: CompanyName\ProjectNameBundle\Admin\DefaultAdmin
+            controller: CompanyNameProjectNameBundle:Admin/DefaultAdmin
+        entities:
+            - {directory: %kernel.root_dir%/../src/CompanyName/ProjectNameBundle/Entity, prefix: CompanyName\ProjectNameBundle\Entity}
+```
+
 ### The Annotations
 
 - Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order on classes for global orders like "show me all properties"
@@ -88,6 +105,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @Sonata\Order\ShowAndFormreorder(with="General", keys={"name"})
  * @Sonata\Order\ShowAndFormreorder(keys={"taxRate"})
+ *
+ * @Sonata\AutoService()
  */
 class Country
 {
