@@ -18,4 +18,9 @@ interface FormInterface extends AdminInterface
      * @return array
      */
     public function getWithOptions();
+
+    /**
+     * @return boolean
+     */
+    public function isIgnoreOnParent();
 }

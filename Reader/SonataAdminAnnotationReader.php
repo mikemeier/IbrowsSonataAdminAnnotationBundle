@@ -2,24 +2,21 @@
 
 namespace Ibrows\Bundle\SonataAdminAnnotationBundle\Reader;
 
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ListMapper;
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ShowMapper;
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\FormMapper;
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\DatagridMapper;
-
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ShowCallbackInterface;
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\FormCallbackInterface;
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ListCallbackInterface;
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\DatagridCallbackInterface;
-
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\ListReorderInterface;
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\FormReorderInterface;
-use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\ShowReorderInterface;
-
 use Ibrows\AnnotationReader\AnnotationReader;
-
-use Sonata\AdminBundle\Datagrid\ListMapper as SonataListMapper;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\DatagridCallbackInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\DatagridMapper;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\FormCallbackInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\FormMapper;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ListCallbackInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ListMapper;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\FormReorderInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\ListReorderInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\Order\ShowReorderInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ShowCallbackInterface;
+use Ibrows\Bundle\SonataAdminAnnotationBundle\Annotation\ShowMapper;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper as SonataDatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper as SonataListMapper;
 use Sonata\AdminBundle\Form\FormMapper as SonataFormMapper;
 use Sonata\AdminBundle\Show\ShowMapper as SonataShowMapper;
 
@@ -31,7 +28,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     public function getListMapperAnnotations($entity)
     {
         $listAnnotations = $this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_LIST, self::SCOPE_PROPERTY);
-        if(!$this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_LIST_ALL, self::SCOPE_CLASS)){
+        if (!$this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_LIST_ALL, self::SCOPE_CLASS)) {
             return $listAnnotations;
         }
 
@@ -51,7 +48,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     public function getShowMapperAnnotations($entity)
     {
         $showAnnotations = $this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_SHOW, self::SCOPE_PROPERTY);
-        if(!$this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_SHOW_ALL, self::SCOPE_CLASS)){
+        if (!$this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_SHOW_ALL, self::SCOPE_CLASS)) {
             return $showAnnotations;
         }
 
@@ -71,7 +68,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     public function getFormMapperAnnotations($entity)
     {
         $formAnnotations = $this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_FORM, self::SCOPE_PROPERTY);
-        if(!$this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_FORM_ALL, self::SCOPE_CLASS)){
+        if (!$this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_FORM_ALL, self::SCOPE_CLASS)) {
             return $formAnnotations;
         }
 
@@ -91,7 +88,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     public function getDatagridMapperAnnotation($entity)
     {
         $datagridAnnotations = $this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_DATAGRID, self::SCOPE_PROPERTY);
-        if(!$this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_DATAGRID_ALL, self::SCOPE_CLASS)){
+        if (!$this->getAnnotationsByType($entity, self::ANNOTATION_TYPE_ADMIN_DATAGRID_ALL, self::SCOPE_CLASS)) {
             return $datagridAnnotations;
         }
 
@@ -112,12 +109,12 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     {
         $annotations = $this->getListMapperAnnotations($entity);
 
-        foreach($annotations as $propertyName => $annotation){
+        foreach ($annotations as $propertyName => $annotation) {
             $method = $annotation->isIdentifier() ? 'addIdentifier' : 'add';
 
             $fieldDescriptionOptions = $annotation->getFieldDescriptionOptions();
             $routeName = $annotation->getRouteName();
-            if($routeName){
+            if ($routeName) {
                 $fieldDescriptionOptions['route'] = array('name' => $routeName);
             }
 
@@ -131,7 +128,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
         $this->invokeCallbacks($entity, $this->getListMapperCallbacks($entity), array($listMapper));
 
         $reorder = $this->getListReorderAnnotation($entity);
-        if($reorder){
+        if ($reorder) {
             $listMapper->reorder($reorder->getKeys());
         }
     }
@@ -143,7 +140,16 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     {
         $annotations = $this->getFormMapperAnnotations($entity);
 
-        foreach($annotations as $propertyName => $annotation){
+        foreach ($annotations as $propertyName => $annotation) {
+            $admin = $formMapper->getAdmin();
+
+            /** @var AdminInterface $rootAdmin */
+            if (method_exists($admin, 'getRoot') && $rootAdmin = $admin->getRoot()) {
+                if ($rootAdmin->getCode() !== $admin->getCode() && $annotation->isIgnoreOnParent()) {
+                    continue;
+                }
+            }
+
             $with = $annotation->getWith() ?: $formMapper->getAdmin()->getLabel();
             $formMapper->with($with, $annotation->getWithOptions());
 
@@ -159,7 +165,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
 
         $this->invokeCallbacks($entity, $this->getFormMapperCallbacks($entity), array($formMapper));
 
-        foreach($this->getFormReorderAnnotations($entity) as $formReorderAnnotation){
+        foreach ($this->getFormReorderAnnotations($entity) as $formReorderAnnotation) {
             $reorderWith = $formReorderAnnotation->getWith() ?: $formMapper->getAdmin()->getLabel();
             $formMapper->with($reorderWith);
             $formMapper->reorder($formReorderAnnotation->getKeys());
@@ -174,7 +180,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     {
         $annotations = $this->getShowMapperAnnotations($entity);
 
-        foreach($annotations as $propertyName => $annotation){
+        foreach ($annotations as $propertyName => $annotation) {
             $with = $annotation->getWith() ?: $showMapper->getAdmin()->getLabel();
             $showMapper->with($with, $annotation->getWithOptions());
 
@@ -189,7 +195,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
 
         $this->invokeCallbacks($entity, $this->getShowMapperCallbacks($entity), array($showMapper));
 
-        foreach($this->getShowReorderAnnotations($entity) as $showReorderAnnotation){
+        foreach ($this->getShowReorderAnnotations($entity) as $showReorderAnnotation) {
             $reorderWith = $showReorderAnnotation->getWith() ?: $showMapper->getAdmin()->getLabel();
             $showMapper->with($reorderWith);
             $showMapper->reorder($showReorderAnnotation->getKeys());
@@ -204,7 +210,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     {
         $annotations = $this->getDatagridMapperAnnotation($entity);
 
-        foreach($annotations as $propertyName => $annotation){
+        foreach ($annotations as $propertyName => $annotation) {
             $datagridMapper->add(
                 $annotation->getName() ?: $propertyName,
                 $annotation->getType(),
@@ -270,7 +276,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     {
         $annotations = $this->getAnnotations($entity);
         $scopeAnnotations = $annotations[self::SCOPE_CLASS];
-        if(!isset($scopeAnnotations[self::ANNOTATION_TYPE_ADMIN_FORM_REORDER])){
+        if (!isset($scopeAnnotations[self::ANNOTATION_TYPE_ADMIN_FORM_REORDER])) {
             return array();
         }
 
@@ -285,7 +291,7 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     {
         $annotations = $this->getAnnotations($entity);
         $scopeAnnotations = $annotations[self::SCOPE_CLASS];
-        if(!isset($scopeAnnotations[self::ANNOTATION_TYPE_ADMIN_SHOW_REORDER])){
+        if (!isset($scopeAnnotations[self::ANNOTATION_TYPE_ADMIN_SHOW_REORDER])) {
             return array();
         }
 
@@ -303,12 +309,12 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
     {
         $annotations = array();
 
-        foreach($properties as $reflectionProperty){
+        foreach ($properties as $reflectionProperty) {
             $propertyName = $reflectionProperty->getName();
-            if(isset($excludedAnnotations[$propertyName])){
+            if (isset($excludedAnnotations[$propertyName])) {
                 continue;
             }
-            if(isset($foundAnnotations[$propertyName])){
+            if (isset($foundAnnotations[$propertyName])) {
                 $annotations[$propertyName] = $foundAnnotations[$propertyName];
                 continue;
             }
@@ -335,9 +341,9 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
      */
     protected function invokeCallbacks($entity, array $callbacks, array $args)
     {
-        if(count($callbacks) > 0){
+        if (count($callbacks) > 0) {
             $classReflection = new \ReflectionClass($entity);
-            foreach($callbacks as $methodName => $annotation){
+            foreach ($callbacks as $methodName => $annotation) {
                 $method = $classReflection->getMethod($methodName);
                 $method->invokeArgs(null, $args);
             }

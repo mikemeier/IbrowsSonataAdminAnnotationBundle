@@ -23,6 +23,11 @@ class FormMapper extends AbstractMapper implements FormInterface
     public $withOptions = array();
 
     /**
+     * @var bool
+     */
+    public $ignoreOnParent = false;
+
+    /**
      * @return array
      */
     public function getOptions()
@@ -44,5 +49,13 @@ class FormMapper extends AbstractMapper implements FormInterface
     public function getWithOptions()
     {
         return $this->withOptions;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIgnoreOnParent()
+    {
+        return $this->ignoreOnParent;
     }
 }
