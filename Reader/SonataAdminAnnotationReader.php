@@ -150,6 +150,12 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
                 }
             }
 
+            $hasTab = false;
+            if ($tab = $annotation->getTab()) {
+                $hasTab = true;
+                $formMapper->tab($tab, $annotation->getTabOptions());
+            }
+
             $with = $annotation->getWith() ?: $formMapper->getAdmin()->getLabel();
             $formMapper->with($with, $annotation->getWithOptions());
 
@@ -161,6 +167,10 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
             );
 
             $formMapper->end();
+
+            if ($hasTab) {
+                $formMapper->end();
+            }
         }
 
         $this->invokeCallbacks($entity, $this->getFormMapperCallbacks($entity), array($formMapper));
@@ -181,6 +191,12 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
         $annotations = $this->getShowMapperAnnotations($entity);
 
         foreach ($annotations as $propertyName => $annotation) {
+            $hasTab = false;
+            if ($tab = $annotation->getTab()) {
+                $hasTab = true;
+                $showMapper->tab($tab, $annotation->getTabOptions());
+            }
+
             $with = $annotation->getWith() ?: $showMapper->getAdmin()->getLabel();
             $showMapper->with($with, $annotation->getWithOptions());
 
@@ -190,7 +206,11 @@ class SonataAdminAnnotationReader extends AnnotationReader implements SonataAdmi
                 $annotation->getFieldDescriptionOptions()
             );
 
-            $showMapper->end($with);
+            $showMapper->end();
+
+            if ($hasTab) {
+                $showMapper->end();
+            }
         }
 
         $this->invokeCallbacks($entity, $this->getShowMapperCallbacks($entity), array($showMapper));

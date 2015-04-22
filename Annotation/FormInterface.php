@@ -20,6 +20,16 @@ interface FormInterface extends AdminInterface
     public function getWithOptions();
 
     /**
+     * @return string|null
+     */
+    public function getTab();
+
+    /**
+     * @return array
+     */
+    public function getTabOptions();
+
+    /**
      * @return boolean
      */
     public function isIgnoreOnParent();

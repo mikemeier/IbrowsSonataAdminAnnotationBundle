@@ -23,6 +23,16 @@ class FormMapper extends AbstractMapper implements FormInterface
     public $withOptions = array();
 
     /**
+     * @var string
+     */
+    public $tab = null;
+
+    /**
+     * @var array
+     */
+    public $tabOptions = array();
+
+    /**
      * @var bool
      */
     public $ignoreOnParent = false;
@@ -57,5 +67,21 @@ class FormMapper extends AbstractMapper implements FormInterface
     public function isIgnoreOnParent()
     {
         return $this->ignoreOnParent;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTab()
+    {
+        return $this->tab;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTabOptions()
+    {
+        return $this->tabOptions;
     }
 }

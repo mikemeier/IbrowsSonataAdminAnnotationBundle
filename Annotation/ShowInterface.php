@@ -13,4 +13,14 @@ interface ShowInterface extends AdminInterface
      * @return array
      */
     public function getWithOptions();
+
+    /**
+     * @return string|null
+     */
+    public function getTab();
+
+    /**
+     * @return array
+     */
+    public function getTabOptions();
 }

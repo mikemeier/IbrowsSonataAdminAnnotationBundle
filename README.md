@@ -16,6 +16,10 @@ Known issues
 New features
 ============
 
+### Version 2.4
+
+- New "tab" and "tabOptions" in FormMapper and ShowMapper Annotation for grouping -> @FormMapper(tab="Main")
+
 ### Version 2.2
 
 - Allow to register SonataAdminServices over Annotations with @AutoService @see Known issues for caching problems

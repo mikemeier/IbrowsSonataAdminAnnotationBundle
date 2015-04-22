@@ -18,6 +18,16 @@ class ShowMapper extends AbstractMapper implements ShowInterface
     public $withOptions = array();
 
     /**
+     * @var string
+     */
+    public $tab = null;
+
+    /**
+     * @var array
+     */
+    public $tabOptions = array();
+
+    /**
      * @return null|string
      */
     public function getWith()
@@ -31,5 +41,21 @@ class ShowMapper extends AbstractMapper implements ShowInterface
     public function getWithOptions()
     {
         return $this->withOptions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTab()
+    {
+        return $this->tab;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTabOptions()
+    {
+        return $this->tabOptions;
     }
 }
