@@ -1,38 +1,11 @@
-IbrowsSonataAdminAnnotationBundle
+IbrowsSonataAdminAnnotationBundle 
 ============================
 
 Manage Sonata Form, Data, List and ShowMapper over annotations
 
-Known issues
-============
-### Version 2.2.*
+[![Latest Stable Version](https://poser.pugx.org/ibrows/sonata-admin-annotation-bundle/v/stable)](https://packagist.org/packages/ibrows/sonata-admin-annotation-bundle) [![Total Downloads](https://poser.pugx.org/ibrows/sonata-admin-annotation-bundle/downloads)](https://packagist.org/packages/ibrows/sonata-admin-annotation-bundle)
 
-- When using the @AutoService Annotation you have to clear the cache everytime you make changes on this Annotation (remove/add/edit). Reason is that the appDevDebugContainer is fully cached and the CompilerPass cannot register the new changes.
-
-### Version 1.1.*
-
-- Using oneToMany/manyToOne relations produces an "entity not managed" doctrine error. Reason is that FormMapper-Annotation per default sets by_reference to false, using @FormMapper(options={"by_reference"=true}) will fix that.
-
-New features
-============
-
-### Version 2.4
-
-- New "tab" and "tabOptions" in FormMapper and ShowMapper Annotation for grouping -> @FormMapper(tab="Main")
-
-### Version 2.2
-
-- Allow to register SonataAdminServices over Annotations with @AutoService @see Known issues for caching problems
-
-### Version 1.2
-
-- Allow reorder of FormMapper/ShowMapper and ListMapper with @Order/FormReorder, @Order/ShowReorder, @Order/ListReorder or @Order/ShowAndFormReorder annotations
-
-### Version 1.1
-
-- New "with" and "withOptions" in FormMapper and ShowMapper Annotation for grouping -> @FormMapper(with="Main")
-- Allow configuration of static callback methods in entity with @FormCallback on Method (see @FormCallback example)
-
+[![knpbundles.com](http://knpbundles.com/ibrows/IbrowsSonataAdminAnnotationBundle/badge-short)](http://knpbundles.com/ibrows/IbrowsSonataAdminAnnotationBundle)
 
 How to install
 ==============
@@ -367,3 +340,33 @@ abstract class AbstractAdmin extends Admin
     }
 }
 ```
+
+Known issues
+============
+### Version 2.2.*
+
+- When using the @AutoService Annotation you have to clear the cache everytime you make changes on this Annotation (remove/add/edit). Reason is that the appDevDebugContainer is fully cached and the CompilerPass cannot register the new changes.
+
+### Version 1.1.*
+
+- Using oneToMany/manyToOne relations produces an "entity not managed" doctrine error. Reason is that FormMapper-Annotation per default sets by_reference to false, using @FormMapper(options={"by_reference"=true}) will fix that.
+
+New features
+============
+
+### Version 2.4
+
+- New "tab" and "tabOptions" in FormMapper and ShowMapper Annotation for grouping -> @FormMapper(tab="Main")
+
+### Version 2.2
+
+- Allow to register SonataAdminServices over Annotations with @AutoService @see Known issues for caching problems
+
+### Version 1.2
+
+- Allow reorder of FormMapper/ShowMapper and ListMapper with @Order/FormReorder, @Order/ShowReorder, @Order/ListReorder or @Order/ShowAndFormReorder annotations
+
+### Version 1.1
+
+- New "with" and "withOptions" in FormMapper and ShowMapper Annotation for grouping -> @FormMapper(with="Main")
+- Allow configuration of static callback methods in entity with @FormCallback on Method (see @FormCallback example)
