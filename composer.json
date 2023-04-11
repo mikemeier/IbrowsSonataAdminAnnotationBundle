@@ -13,8 +13,8 @@
     "require": {
         "php": ">=5.3.0",
         "ibrows/annotation-reader": "~1.0",
-        "sonata-project/admin-bundle": "~2.3|~3.0",
-        "symfony/framework-bundle": ">=2.0|~3.0"
+        "sonata-project/admin-bundle": "*",
+        "symfony/framework-bundle": "*"
     },
     "autoload": {
         "psr-0": { "Ibrows\\Bundle\\SonataAdminAnnotationBundle": "" }
